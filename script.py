@@ -125,4 +125,54 @@ df.to_csv(r"C:\Users\matcuoco\Documents\Project\python\data-edit.csv", index=Fal
 
 ##############
 
-df.columns
+#Estrazione Pietro
+
+#Import libraries
+import pandas as pd
+import numpy as np
+
+#Read survey
+df = pd.read_excel(r"C:\Users\matcuoco\Documents\Survey.xlsx", sheet_name="Foglio1")
+df
+
+#Subset survey
+data = df[['idu','d9_1','d6_6_4','d6_6_5','d8_8_4','d8_8_5','d8_7_4','d8_7_5']]
+data
+
+
+#data.loc[data['idu'] == 14772]
+
+results = data.loc[(data['d9_1'] == 1) & ((data['d6_6_4'] == 1) | (data['d6_6_5'] == 1)) & ((data['d8_8_4'] == 1) | (data['d8_8_5'] == 1)) & ((data['d8_7_4'] == 1) | (data['d8_7_5'] == 1))]
+results
+
+#results_2 = data.loc[(data['d9_1'] == 1) | (data['d6_6_4'] == 1) | (data['d6_6_5'] == 1) | (data['d8_8_4'] == 1) | (data['d8_8_5'] == 1) | (data['d8_7_4'] == 1) | (data['d8_7_5'] == 1)]
+#results_2
+
+#Export to CSV
+results.to_csv(r"C:\Users\matcuoco\Documents\Results.csv", index=False)
+
+#############
+
+#Estrazione Pietro 2
+
+#Import libraries
+import pandas as pd
+import numpy as np
+
+#Read survey
+df = pd.read_excel(r"C:\Users\matcuoco\Documents\new_excel.xlsx", sheet_name="new")
+df
+
+data = df[['idu','d9','d6_6','d8_8','d8_7']]
+data = data.fillna(0)
+data
+
+#Results
+results = data.loc[(data['d9'] == 1) & ((data['d6_6'] == 1) | (data['d6_6'] == 2)) & ((data['d8_8'] == 1) | (data['d8_8'] == 2)) & ((data['d8_7'] == 1) | (data['d8_7'] == 2))]
+results['idu'].nunique()
+
+#Add column
+export = results.loc[results['target'] == 'Status Shoppers'][['idu','target']].drop_duplicates(subset="idu") 
+
+#Export to CSV
+export.to_csv(r"C:\Users\matcuoco\Documents\Results.csv", index=False)

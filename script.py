@@ -97,31 +97,32 @@ import pandas as pd
 import numpy as np
 
 #Dataset
-df = pd.read_csv(r"C:\Users\matcuoco\Documents\Project\python\data.csv", header = 0, sep = ',')
+#df = pd.read_csv(r"C:\Users\matcuoco\Documents\Project\python\data.csv", header = 0, sep = ',')
+df = pd.read_excel(r"C:\Users\matcuoco\Documents\Project\python\data.xlsx", sheet_name="Foglio1")
 
-#Fill with 0
-df = df.replace(' ',np.nan)
-df = df.fillna('0')
+#Fill with 0 (used Excel instead of CSV solved)
+#df = df.replace(' ','0')
+#df = df.fillna('0')
 
 #Dictionary
 di = pd.read_excel(r"C:\Users\matcuoco\Documents\Project\python\dictionary.xlsx", sheet_name="values")
-
+arr = ['idu']
 for i in df.columns:
-    di_dict = di.loc[di["column"] == i].set_index('code')['value'].to_dict()
-    df_map = df[i].map(di_dict) 
-    df[i] = df_map.values
+    if (i not in arr):
+        di_dict = di.loc[di["column"] == i].set_index('code')['value'].to_dict()
+        df_map = df[i].map(di_dict) 
+        df[i] = df_map.values
 
 #Check output
-df
+df.head()
+
+#Rename columns
+col = pd.read_excel(r"C:\Users\matcuoco\Documents\Project\python\dictionary.xlsx", sheet_name="columns")
+df.rename(columns = col.set_index('column')['name'].to_dict(), inplace=True)
 
 #Export to CSV
-df.to_csv(r"C:\Users\matcuoco\Documents\Project\python\data-edit.csv")
+df.to_csv(r"C:\Users\matcuoco\Documents\Project\python\data-edit.csv", index=False)
 
 ##############
 
-di_dict = di.loc[di["column"] == 'sd1'].set_index('code')['value'].to_dict()
-df['sd1']
-di_dict
-df.groupby('sd1')['idu'].nunique()
-df_map = df['sd1'].map(di_dict)
-df_map
+df.columns
